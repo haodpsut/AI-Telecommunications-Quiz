@@ -1,3 +1,4 @@
+
 export interface Term {
   term: string;
   definition: string;
@@ -10,3 +11,5 @@ export interface QuizQuestion {
 }
 
 export type QuizState = 'apikey' | 'welcome' | 'loading' | 'active' | 'results';
+
+export type QuizTopic = 'telecom' | 'quantum' | 'qrl';

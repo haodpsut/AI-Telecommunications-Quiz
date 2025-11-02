@@ -1,11 +1,12 @@
+
 import React, { useState, useCallback, useEffect } from 'react';
 import { GoogleGenAI } from "@google/genai";
 import { WelcomeScreen } from './components/WelcomeScreen';
 import { QuizScreen } from './components/QuizScreen';
 import { ResultsScreen } from './components/ResultsScreen';
 import { ApiKeyScreen } from './components/ApiKeyScreen';
-import { TELECOM_TERMS, TOTAL_QUESTIONS } from './constants';
-import type { QuizQuestion, QuizState } from './types';
+import { TOPICS, TOTAL_QUESTIONS } from './constants';
+import type { QuizQuestion, QuizState, QuizTopic } from './types';
 
 const FullScreenLoader: React.FC<{ text: string }> = ({ text }) => (
     <div className="flex flex-col items-center justify-center text-center animate-fade-in">
@@ -26,6 +27,7 @@ const App: React.FC = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  const [selectedTopic, setSelectedTopic] = useState<QuizTopic>('telecom');
 
   useEffect(() => {
     const savedApiKey = localStorage.getItem('geminiApiKey');
@@ -63,9 +65,10 @@ const App: React.FC = () => {
 
     try {
       const ai = new GoogleGenAI({ apiKey });
-      const termList = JSON.stringify(TELECOM_TERMS.map(t => ({ term: t.term, definition: t.definition })), null, 2);
+      const currentTopic = TOPICS[selectedTopic];
+      const termList = JSON.stringify(currentTopic.terms.map(t => ({ term: t.term, definition: t.definition })), null, 2);
       const prompt = `
-        You are an expert quiz creator specializing in telecommunications.
+        You are an expert quiz creator specializing in ${currentTopic.name}.
         Based on the following list of terms, generate ${TOTAL_QUESTIONS} unique multiple-choice questions.
 
         Each question must present a term, and the user must select the correct definition from four options.
@@ -82,7 +85,7 @@ const App: React.FC = () => {
           "correctAnswer": "The correct definition string that is also present in the options array"
         }
 
-        List of terms and definitions:
+        List of terms and definitions for ${currentTopic.name}:
         ${termList}
       `;
       
@@ -138,7 +141,7 @@ const App: React.FC = () => {
       setError(`Failed to generate quiz. Please check your API key and network connection. Details: ${e.message}`);
       setQuizState('welcome');
     }
-  }, [apiKey]);
+  }, [apiKey, selectedTopic]);
 
 
   const handleAnswer = (isCorrect: boolean) => {
@@ -149,7 +152,7 @@ const App: React.FC = () => {
 
   const handleNext = () => {
     const nextIndex = currentQuestionIndex + 1;
-    if (nextIndex < TOTAL_QUESTIONS) {
+    if (nextIndex < questions.length) { // Use questions.length to handle cases where fewer questions are generated
       setCurrentQuestionIndex(nextIndex);
     } else {
       setQuizState('results');
@@ -172,6 +175,8 @@ const App: React.FC = () => {
             onClearApiKey={handleClearApiKey}
             isLoading={quizState === 'loading'}
             error={error}
+            selectedTopic={selectedTopic}
+            onTopicChange={setSelectedTopic}
           />
         );
        case 'loading':
@@ -185,7 +190,7 @@ const App: React.FC = () => {
           <QuizScreen
             question={currentQuestion}
             questionNumber={currentQuestionIndex + 1}
-            totalQuestions={TOTAL_QUESTIONS}
+            totalQuestions={questions.length} // Use actual number of questions
             onAnswer={handleAnswer}
             onNext={handleNext}
           />
@@ -194,12 +199,12 @@ const App: React.FC = () => {
         return (
           <ResultsScreen
             score={score}
-            totalQuestions={TOTAL_QUESTIONS}
+            totalQuestions={questions.length} // Use actual number of questions
             onRestart={restartQuiz}
           />
         );
       default:
-        return <WelcomeScreen onStart={generateQuiz} onClearApiKey={handleClearApiKey} isLoading={false} error={error} />;
+        return <WelcomeScreen onStart={generateQuiz} onClearApiKey={handleClearApiKey} isLoading={false} error={error} selectedTopic={selectedTopic} onTopicChange={setSelectedTopic} />;
     }
   };
 

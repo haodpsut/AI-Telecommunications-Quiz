@@ -1,5 +1,5 @@
 {
-  "name": "AI Telecommunications Quiz",
-  "description": "An interactive quiz app powered by the Gemini API to dynamically generate questions and test your knowledge of key telecommunications concepts.",
+  "name": "AI-Powered Quiz",
+  "description": "An interactive quiz app powered by the Gemini API to dynamically generate questions on various topics and test your knowledge.",
   "requestFramePermissions": []
 }

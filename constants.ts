@@ -1,8 +1,14 @@
-import type { Term } from './types';
 
-export const TOTAL_QUESTIONS = 50;
+import type { Term, QuizTopic } from './types';
 
-export const TELECOM_TERMS: Term[] = [
+export const TOTAL_QUESTIONS = 10;
+
+export interface Topic {
+  name: string;
+  terms: Term[];
+}
+
+const telecomTerms: Term[] = [
     { "term": "5G NR (New Radio)", "definition": "The global standard for a unified, more capable 5G wireless air interface." },
     { "term": "Latency", "definition": "The time delay for a data packet to travel from a source to a destination." },
     { "term": "Bandwidth", "definition": "The maximum rate of data transfer across a given path." },
@@ -52,5 +58,45 @@ export const TELECOM_TERMS: Term[] = [
     { "term": "Modulation", "definition": "The process of varying one or more properties of a periodic waveform, called the carrier signal, with a modulating signal that typically contains information to be transmitted." },
     { "term": "Demodulation", "definition": "The act of extracting the original information-bearing signal from a modulated carrier wave." },
     { "term": "Frequency Reuse", "definition": "The system of assigning and reusing frequencies to improve efficiency and capacity in cellular networks." },
-    { "term": "Cellular Network", "definition": "A communication network where the last link is wireless. The network is distributed over land areas called cells, each served by at least one fixed-location transceiver." }
+    { "term": "Cellular Network", "definition": "A communication network where the last link is wireless. The network is distributed over land areas called cells, each served by at least one fixed-location transceiver." },
+    { "term": "RIS (Reconfigurable Intelligent Surface)", "definition": "A programmable surface that can manipulate electromagnetic waves to improve wireless communication." },
+    { "term": "Coverage", "definition": "The geographical area where a particular service, like cellular reception, is available." },
+    { "term": "Connection Time", "definition": "The duration required to establish a communication link between two or more points." }
 ];
+
+export const TOPICS: Record<QuizTopic, Topic> = {
+    telecom: {
+        name: "Telecommunications",
+        terms: telecomTerms
+    },
+    quantum: {
+        name: "Quantum",
+        terms: [
+            { "term": "Qubit", "definition": "The basic unit of quantum information, the quantum analogue of the classical bit." },
+            { "term": "Superposition", "definition": "A fundamental principle of quantum mechanics where a quantum system can exist in multiple states at the same time." },
+            { "term": "Entanglement", "definition": "A quantum mechanical phenomenon in which the quantum states of two or more objects have to be described with reference to each other, even though the individual objects may be spatially separated." },
+            { "term": "Quantum Gate", "definition": "A basic quantum circuit operating on a small number of qubits. They are the building blocks of quantum circuits, like classical logic gates are for conventional digital circuits." },
+            { "term": "Quantum Computing", "definition": "An area of computing focused on developing computer technology based on the principles of quantum theory." },
+            { "term": "Quantum Inspired", "definition": "Classical algorithms or computing models that are inspired by concepts from quantum mechanics, but run on classical computers." },
+            { "term": "QML (Quantum Machine Learning)", "definition": "An emerging interdisciplinary research area that explores the interplay of quantum computing and machine learning." },
+            { "term": "Decoherence", "definition": "The loss of quantum coherence, where a quantum system loses its quantum properties due to interaction with its environment." },
+            { "term": "Shor's Algorithm", "definition": "A quantum algorithm for integer factorization, which is exponentially faster than the best-known classical algorithm." },
+            { "term": "Grover's Algorithm", "definition": "A quantum algorithm for searching an unsorted database, which provides a quadratic speedup over classical algorithms." },
+        ]
+    },
+    qrl: {
+        name: "Quantum Reinforcement Learning",
+        terms: [
+            { "term": "Quantum Reinforcement Learning (QRL)", "definition": "A field that combines quantum computing with reinforcement learning to potentially achieve speedups or performance improvements for certain RL tasks." },
+            { "term": "Quantum Agent", "definition": "An agent in a reinforcement learning framework whose decision-making process (policy) is implemented using a quantum circuit or algorithm." },
+            { "term": "Variational Quantum Circuit (VQC)", "definition": "A hybrid quantum-classical algorithm where a classical optimizer is used to train the parameters of a quantum circuit to solve a specific problem." },
+            { "term": "Quantum State Representation", "definition": "Using quantum states (qubits) to encode the state of the environment in a reinforcement learning problem." },
+            { "term": "Quantum Policy Gradient", "definition": "A QRL algorithm that uses a parameterized quantum circuit to represent the policy and updates its parameters using a gradient-based method." },
+            { "term": "Hybrid Quantum-Classical RL", "definition": "Reinforcement learning models that leverage both classical and quantum processors to perform learning tasks." },
+            { "term": "Quantum Environment", "definition": "An environment in reinforcement learning where the dynamics or states are governed by the principles of quantum mechanics." },
+            { "term": "Quantum-enhanced Experience Replay", "definition": "Using quantum algorithms, such as Grover's search, to potentially speed up the process of sampling from the experience replay buffer in RL." },
+            { "term": "Parameter Shift Rule", "definition": "A method to analytically compute gradients of expectation values of parameterized quantum circuits, often used in training VQCs for QML and QRL." },
+            { "term": "Projective Measurement", "definition": "A type of quantum measurement used to extract classical information from a quantum state, often used to determine an agent's action in QRL." },
+        ]
+    }
+};
