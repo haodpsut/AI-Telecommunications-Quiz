@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
 import { GoogleGenAI } from "@google/genai";
 import { WelcomeScreen } from './components/WelcomeScreen';
@@ -78,11 +77,12 @@ const App: React.FC = () => {
         - Do not repeat a term in more than one question.
         
         IMPORTANT: Output EACH question as a single, minified JSON object on a new line. Do not wrap the objects in a JSON array or use markdown backticks like \`\`\`json.
-        The JSON object for each question must follow this exact schema, where 'options' is an array of four strings:
+        The JSON object for each question must follow this exact schema:
         {
           "term": "The term for the question",
           "options": ["Definition A", "Definition B", "Definition C", "Definition D"],
-          "correctAnswer": "The correct definition string that is also present in the options array"
+          "correctAnswer": "The correct definition string that is also present in the options array",
+          "explanation": "A brief, one-sentence explanation of why the correct answer is correct, focusing on the key concept."
         }
 
         List of terms and definitions for ${currentTopic.name}:

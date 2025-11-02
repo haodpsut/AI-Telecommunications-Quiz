@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 interface ResultsScreenProps {
@@ -9,7 +8,7 @@ interface ResultsScreenProps {
 
 const getFeedback = (score: number, total: number): { message: string; color: string } => {
   const percentage = (score / total) * 100;
-  if (percentage >= 80) return { message: "Excellent! You're a telecom expert!", color: 'text-green-400' };
+  if (percentage >= 80) return { message: "Excellent! You're an expert!", color: 'text-green-400' };
   if (percentage >= 50) return { message: "Good job! A solid performance.", color: 'text-yellow-400' };
   return { message: "Keep studying! You'll get there.", color: 'text-red-400' };
 };

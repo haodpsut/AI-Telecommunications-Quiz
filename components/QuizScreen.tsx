@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import type { QuizQuestion } from '../types';
 
@@ -85,13 +84,19 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({ question, questionNumber
       </div>
       
       {isAnswered && (
-         <div className="mt-6 text-right animate-fade-in">
-          <button 
-            onClick={onNext}
-            className="bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold py-2 px-6 rounded-lg transition-transform transform hover:scale-105"
-          >
-            {questionNumber === totalQuestions ? 'Finish Quiz' : 'Next Question'}
-          </button>
+         <div className="mt-6 animate-fade-in">
+            <div className="text-left p-4 bg-slate-700/50 border-l-4 border-cyan-400 rounded-r-lg mb-4">
+              <h4 className="font-bold text-cyan-400 mb-1">Explanation</h4>
+              <p className="text-slate-300">{question.explanation}</p>
+            </div>
+            <div className="text-right">
+              <button 
+                onClick={onNext}
+                className="bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold py-2 px-6 rounded-lg transition-transform transform hover:scale-105"
+              >
+                {questionNumber === totalQuestions ? 'Finish Quiz' : 'Next Question'}
+              </button>
+            </div>
          </div>
       )}
     </div>

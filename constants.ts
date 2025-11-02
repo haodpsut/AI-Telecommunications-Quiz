@@ -1,4 +1,3 @@
-
 import type { Term, QuizTopic } from './types';
 
 export const TOTAL_QUESTIONS = 10;
@@ -64,6 +63,39 @@ const telecomTerms: Term[] = [
     { "term": "Connection Time", "definition": "The duration required to establish a communication link between two or more points." }
 ];
 
+const satelliteTerms: Term[] = [
+    { "term": "LEO (Low Earth Orbit)", "definition": "An orbit around Earth with an altitude between 160 to 2,000 kilometers, characterized by low latency and fast satellite movement." },
+    { "term": "MEO (Medium Earth Orbit)", "definition": "An orbit around Earth with an altitude between 2,000 to 35,786 kilometers, offering a balance between coverage and latency." },
+    { "term": "GEO (Geostationary Earth Orbit)", "definition": "A circular orbit 35,786 kilometers above the Earth's equator, where satellites appear stationary from the ground." },
+    { "term": "Satellite Constellation", "definition": "A group of artificial satellites working together as a system to provide global or near-global coverage." },
+    { "term": "Uplink", "definition": "The communication link for transmitting signals from a ground station to a satellite." },
+    { "term": "Downlink", "definition": "The communication link for transmitting signals from a satellite to a ground station." },
+    { "term": "Transponder", "definition": "A wireless communications device on a satellite that receives a signal, amplifies it, and retransmits it on a different frequency." },
+    { "term": "Ground Station", "definition": "A terrestrial radio station designed for extraplanetary telecommunication with spacecraft, or reception of radio waves from astronomical radio sources." },
+    { "term": "Satellite Bus", "definition": "The main body and structural component of the satellite that holds all the scientific instruments and other equipment." },
+    { "term": "Payload", "definition": "The equipment a satellite carries to perform its mission, such as antennas, cameras, or sensors." },
+    { "term": "Orbital Slot", "definition": "A specific location in a geostationary orbit that is assigned to a satellite." },
+    { "term": "VSAT (Very Small Aperture Terminal)", "definition": "A small, two-way ground station that transmits and receives data, voice, and video signals over a satellite communication network." },
+    { "term": "Doppler Shift", "definition": "The change in frequency of a wave in relation to an observer who is moving relative to the wave source, particularly noticeable with LEO satellites." },
+    { "term": "Footprint", "definition": "The geographical area on Earth's surface where a satellite's signals can be received." }
+];
+
+const saginTerms: Term[] = [
+    { "term": "SAGIN (Space-Air-Ground Integrated Network)", "definition": "A hierarchical network architecture that integrates satellite networks, aerial networks (e.g., UAVs, HAPS), and terrestrial networks to provide seamless global coverage." },
+    { "term": "NTN (Non-Terrestrial Networks)", "definition": "Communication networks that include space-borne or airborne assets, such as satellites or high-altitude platforms, as part of their infrastructure." },
+    { "term": "HAPS (High Altitude Platform Station)", "definition": "Aircraft, such as airships or planes, positioned in the stratosphere (20-50 km altitude) to provide communication and surveillance services." },
+    { "term": "UAV (Unmanned Aerial Vehicle)", "definition": "An aircraft without a human pilot on board, often used as a mobile communication node in aerial networks." },
+    { "term": "Inter-Satellite Links (ISL)", "definition": "Direct communication links between satellites, allowing data to be routed through space without needing to go back to a ground station." },
+    { "term": "Multi-Layer Network", "definition": "A network composed of different tiers or layers (e.g., space, air, ground) that interoperate to provide services." },
+    { "term": "Heterogeneous Network", "definition": "A network composed of different types of nodes and technologies (e.g., cellular, Wi-Fi, satellite) that work together." },
+    { "term": "Seamless Coverage", "definition": "The ability of a network to provide continuous connectivity to users as they move across different geographical areas and network types." },
+    { "term": "Service Continuity", "definition": "The uninterrupted provision of a service to a user, even when they move between different networks (e.g., from a terrestrial to a satellite network)." },
+    { "term": "Resource Allocation", "definition": "The process of assigning network resources, such as bandwidth and power, to different users and services in an efficient manner." },
+    { "term": "Backhaul", "definition": "The portion of a network that connects the edge (e.g., cell towers) to the core network, which can be provided by satellites in remote areas." },
+    { "term": "Network Orchestration", "definition": "The automated management, coordination, and control of network resources and services across different network domains (space, air, ground)." }
+];
+
+
 export const TOPICS: Record<QuizTopic, Topic> = {
     telecom: {
         name: "Telecommunications",
@@ -98,5 +130,13 @@ export const TOPICS: Record<QuizTopic, Topic> = {
             { "term": "Parameter Shift Rule", "definition": "A method to analytically compute gradients of expectation values of parameterized quantum circuits, often used in training VQCs for QML and QRL." },
             { "term": "Projective Measurement", "definition": "A type of quantum measurement used to extract classical information from a quantum state, often used to determine an agent's action in QRL." },
         ]
+    },
+    satellite: {
+        name: "Satellite",
+        terms: satelliteTerms
+    },
+    sagin: {
+        name: "SAGINs",
+        terms: saginTerms
     }
 };
