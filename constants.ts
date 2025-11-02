@@ -1,6 +1,6 @@
 import type { Term, QuizTopic } from './types';
 
-export const TOTAL_QUESTIONS = 10;
+export const TOTAL_QUESTIONS = 50;
 
 export interface Topic {
   name: string;
