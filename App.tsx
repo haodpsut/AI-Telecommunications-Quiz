@@ -1,0 +1,215 @@
+import React, { useState, useCallback, useEffect } from 'react';
+import { GoogleGenAI } from "@google/genai";
+import { WelcomeScreen } from './components/WelcomeScreen';
+import { QuizScreen } from './components/QuizScreen';
+import { ResultsScreen } from './components/ResultsScreen';
+import { ApiKeyScreen } from './components/ApiKeyScreen';
+import { TELECOM_TERMS, TOTAL_QUESTIONS } from './constants';
+import type { QuizQuestion, QuizState } from './types';
+
+const FullScreenLoader: React.FC<{ text: string }> = ({ text }) => (
+    <div className="flex flex-col items-center justify-center text-center animate-fade-in">
+        <div className="flex items-center justify-center space-x-2 mb-4">
+            <div className="w-6 h-6 rounded-full animate-pulse bg-cyan-400"></div>
+            <div className="w-6 h-6 rounded-full animate-pulse bg-cyan-400" style={{ animationDelay: '0.2s' }}></div>
+            <div className="w-6 h-6 rounded-full animate-pulse bg-cyan-400" style={{ animationDelay: '0.4s' }}></div>
+        </div>
+        <p className="text-xl text-slate-300">{text}</p>
+    </div>
+);
+
+
+const App: React.FC = () => {
+  const [apiKey, setApiKey] = useState<string | null>(null);
+  const [quizState, setQuizState] = useState<QuizState>('apikey');
+  const [questions, setQuestions] = useState<QuizQuestion[]>([]);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [score, setScore] = useState(0);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const savedApiKey = localStorage.getItem('geminiApiKey');
+    if (savedApiKey) {
+      setApiKey(savedApiKey);
+      setQuizState('welcome');
+    }
+  }, []);
+
+  const handleApiKeySubmit = (key: string) => {
+    localStorage.setItem('geminiApiKey', key);
+    setApiKey(key);
+    setQuizState('welcome');
+    setError(null);
+  };
+
+  const handleClearApiKey = () => {
+    localStorage.removeItem('geminiApiKey');
+    setApiKey(null);
+    setQuizState('apikey');
+  };
+
+  const generateQuiz = useCallback(async () => {
+    if (!apiKey) {
+      setError("API Key is not set.");
+      setQuizState('apikey');
+      return;
+    }
+
+    setQuizState('loading');
+    setError(null);
+    setQuestions([]);
+    setScore(0);
+    setCurrentQuestionIndex(0);
+
+    try {
+      const ai = new GoogleGenAI({ apiKey });
+      const termList = JSON.stringify(TELECOM_TERMS.map(t => ({ term: t.term, definition: t.definition })), null, 2);
+      const prompt = `
+        You are an expert quiz creator specializing in telecommunications.
+        Based on the following list of terms, generate ${TOTAL_QUESTIONS} unique multiple-choice questions.
+
+        Each question must present a term, and the user must select the correct definition from four options.
+        - One option must be the correct definition for the given term.
+        - The other three options must be plausible but incorrect definitions, sourced from other definitions in the provided list.
+        - Ensure the options are different for each question and are shuffled randomly.
+        - Do not repeat a term in more than one question.
+        
+        IMPORTANT: Output EACH question as a single, minified JSON object on a new line. Do not wrap the objects in a JSON array or use markdown backticks like \`\`\`json.
+        The JSON object for each question must follow this exact schema, where 'options' is an array of four strings:
+        {
+          "term": "The term for the question",
+          "options": ["Definition A", "Definition B", "Definition C", "Definition D"],
+          "correctAnswer": "The correct definition string that is also present in the options array"
+        }
+
+        List of terms and definitions:
+        ${termList}
+      `;
+      
+      const stream = await ai.models.generateContentStream({
+        model: 'gemini-2.5-flash',
+        contents: prompt,
+      });
+
+      let buffer = '';
+      let firstQuestionLoaded = false;
+
+      for await (const chunk of stream) {
+          buffer += chunk.text;
+          let newlineIndex;
+          while ((newlineIndex = buffer.indexOf('\n')) !== -1) {
+              const line = buffer.substring(0, newlineIndex).trim();
+              buffer = buffer.substring(newlineIndex + 1);
+
+              if (line) {
+                  try {
+                      const question = JSON.parse(line) as QuizQuestion;
+                      setQuestions(prev => [...prev, question]);
+                      if (!firstQuestionLoaded) {
+                          firstQuestionLoaded = true;
+                          setQuizState('active');
+                      }
+                  } catch (e) {
+                      console.warn("Skipping line, failed to parse question JSON:", line, e);
+                  }
+              }
+          }
+      }
+      
+      if (buffer.trim()) {
+          try {
+              const question = JSON.parse(buffer.trim()) as QuizQuestion;
+              setQuestions(prev => [...prev, question]);
+              if (!firstQuestionLoaded) {
+                  firstQuestionLoaded = true;
+                  setQuizState('active');
+              }
+          } catch (e) {
+               console.warn("Skipping remaining buffer, failed to parse question JSON:", buffer, e);
+          }
+      }
+
+      if (!firstQuestionLoaded) {
+          throw new Error("AI failed to generate any valid questions from the stream.");
+      }
+
+    } catch (e: any) {
+      console.error(e);
+      setError(`Failed to generate quiz. Please check your API key and network connection. Details: ${e.message}`);
+      setQuizState('welcome');
+    }
+  }, [apiKey]);
+
+
+  const handleAnswer = (isCorrect: boolean) => {
+    if (isCorrect) {
+      setScore((prevScore) => prevScore + 1);
+    }
+  };
+
+  const handleNext = () => {
+    const nextIndex = currentQuestionIndex + 1;
+    if (nextIndex < TOTAL_QUESTIONS) {
+      setCurrentQuestionIndex(nextIndex);
+    } else {
+      setQuizState('results');
+    }
+  };
+
+  const restartQuiz = () => {
+    setQuizState('welcome');
+    setQuestions([]);
+  };
+
+  const renderContent = () => {
+    switch (quizState) {
+      case 'apikey':
+        return <ApiKeyScreen onApiKeySubmit={handleApiKeySubmit} />;
+      case 'welcome':
+        return (
+          <WelcomeScreen
+            onStart={generateQuiz}
+            onClearApiKey={handleClearApiKey}
+            isLoading={quizState === 'loading'}
+            error={error}
+          />
+        );
+       case 'loading':
+        return <FullScreenLoader text="Generating your quiz..." />;
+      case 'active':
+        const currentQuestion = questions[currentQuestionIndex];
+        if (!currentQuestion) {
+          return <FullScreenLoader text="Loading next question..." />
+        }
+        return (
+          <QuizScreen
+            question={currentQuestion}
+            questionNumber={currentQuestionIndex + 1}
+            totalQuestions={TOTAL_QUESTIONS}
+            onAnswer={handleAnswer}
+            onNext={handleNext}
+          />
+        );
+      case 'results':
+        return (
+          <ResultsScreen
+            score={score}
+            totalQuestions={TOTAL_QUESTIONS}
+            onRestart={restartQuiz}
+          />
+        );
+      default:
+        return <WelcomeScreen onStart={generateQuiz} onClearApiKey={handleClearApiKey} isLoading={false} error={error} />;
+    }
+  };
+
+  return (
+    <div className="bg-slate-900 text-white min-h-screen flex items-center justify-center p-4 font-sans">
+      <main className="w-full max-w-2xl mx-auto">
+        {renderContent()}
+      </main>
+    </div>
+  );
+};
+
+export default App;

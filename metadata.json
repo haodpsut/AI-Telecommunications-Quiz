@@ -1,0 +1,5 @@
+{
+  "name": "AI Telecommunications Quiz",
+  "description": "An interactive quiz app powered by the Gemini API to dynamically generate questions and test your knowledge of key telecommunications concepts.",
+  "requestFramePermissions": []
+}
