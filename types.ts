@@ -12,4 +12,4 @@ export interface QuizQuestion {
 
 export type QuizState = 'apikey' | 'welcome' | 'loading' | 'active' | 'results';
 
-export type QuizTopic = 'telecom' | 'quantum' | 'qrl' | 'satellite' | 'sagin';
+export type QuizTopic = 'telecom' | 'quantum' | 'qrl' | 'satellite' | 'sagin' | 'federated' | 'deeplearning' | 'llm' | 'ml' | 'nlp';

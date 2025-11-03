@@ -95,6 +95,62 @@ const saginTerms: Term[] = [
     { "term": "Network Orchestration", "definition": "The automated management, coordination, and control of network resources and services across different network domains (space, air, ground)." }
 ];
 
+const federatedLearningTerms: Term[] = [
+    { "term": "Federated Learning (FL)", "definition": "A machine learning setting where multiple clients collaborate on a model, under the coordination of a central server, without exchanging their local data." },
+    { "term": "Model Aggregation", "definition": "The process where a central server combines model updates from multiple clients to produce a new global model, like in the FedAvg algorithm." },
+    { "term": "Non-IID Data", "definition": "A common challenge where the data distribution varies significantly across different clients, meaning it is not Independent and Identically Distributed." },
+    { "term": "Horizontal Federated Learning", "definition": "A scenario where clients share the same feature space but have different data samples." },
+    { "term": "Vertical Federated Learning", "definition": "A scenario where clients have different feature spaces but share the same data samples." },
+    { "term": "Secure Aggregation", "definition": "A cryptographic technique allowing a server to compute the sum of model updates without seeing any individual client's update." },
+    { "term": "Differential Privacy", "definition": "A system for sharing information about a dataset by describing group patterns while withholding information about individuals." },
+    { "term": "Client Drift", "definition": "The phenomenon where local models on clients diverge from the global model due to training on their specific non-IID data." }
+];
+
+const deepLearningTerms: Term[] = [
+    { "term": "Neural Network", "definition": "A series of algorithms that mimics the human brain to recognize underlying relationships in a set of data." },
+    { "term": "Activation Function", "definition": "A function in a neural network that defines the output of a node given a set of inputs (e.g., ReLU, Sigmoid)." },
+    { "term": "Backpropagation", "definition": "An algorithm used to train neural networks by calculating the gradient of the loss function with respect to the network's weights." },
+    { "term": "Convolutional Neural Network (CNN)", "definition": "A class of deep neural networks, most commonly applied to analyzing visual imagery." },
+    { "term": "Recurrent Neural Network (RNN)", "definition": "A class of neural networks where connections between nodes form a directed graph along a temporal sequence, used for sequential data." },
+    { "term": "Long Short-Term Memory (LSTM)", "definition": "A special kind of RNN capable of learning long-term dependencies and avoiding the vanishing gradient problem." },
+    { "term": "Gradient Descent", "definition": "An optimization algorithm used to minimize a function by iteratively moving in the direction of the steepest descent." },
+    { "term": "Overfitting", "definition": "A modeling error when a function is too closely fit to its training data, resulting in poor performance on new data." },
+    { "term": "Dropout", "definition": "A regularization technique for reducing overfitting by randomly dropping neurons during training." }
+];
+
+const llmTerms: Term[] = [
+    { "term": "Large Language Model (LLM)", "definition": "A language model with a very large number of parameters, trained on vast text data to generate human-like text." },
+    { "term": "Transformer Architecture", "definition": "A neural network architecture that relies on self-attention mechanisms, forming the basis for most modern LLMs." },
+    { "term": "Attention Mechanism", "definition": "A technique that allows a model to focus on relevant parts of the input sequence when producing an output." },
+    { "term": "Prompt Engineering", "definition": "The process of designing and refining input text (prompts) to elicit desired responses from an LLM." },
+    { "term": "Hallucination", "definition": "A phenomenon where an LLM generates text that is factually incorrect or nonsensical." },
+    { "term": "Fine-tuning", "definition": "The process of adapting a pre-trained LLM on a smaller, task-specific dataset." },
+    { "term": "In-Context Learning", "definition": "The ability of an LLM to learn a task from a few examples provided in the prompt without updating its weights." },
+    { "term": "RAG (Retrieval-Augmented Generation)", "definition": "A technique that enhances LLMs by retrieving relevant information from an external knowledge base to use as context." }
+];
+
+const mlTerms: Term[] = [
+    { "term": "Machine Learning (ML)", "definition": "A field of AI that uses statistical techniques to enable computer systems to learn from data without being explicitly programmed." },
+    { "term": "Supervised Learning", "definition": "A type of ML where the model learns from labeled data, where each data point is tagged with a correct output." },
+    { "term": "Unsupervised Learning", "definition": "A type of ML where the model works with unlabeled data to find patterns or structures, such as clustering." },
+    { "term": "Reinforcement Learning (RL)", "definition": "A type of ML where an agent learns to make decisions by performing actions in an environment to maximize a reward." },
+    { "term": "Feature", "definition": "An individual measurable property or characteristic of a phenomenon being observed, used as input for a model." },
+    { "term": "Loss Function", "definition": "A function that measures the difference between a model's prediction and the actual target value." },
+    { "term": "Classification", "definition": "A supervised learning task of predicting a categorical class label." },
+    { "term": "Regression", "definition": "A supervised learning task of predicting a continuous numerical value." }
+];
+
+const nlpTerms: Term[] = [
+    { "term": "Natural Language Processing (NLP)", "definition": "A subfield of AI concerned with the interactions between computers and human language." },
+    { "term": "Tokenization", "definition": "The process of breaking down a stream of text into smaller units called tokens, such as words or subwords." },
+    { "term": "Stemming", "definition": "A text normalization process of reducing a word to its root form (e.g., 'running' to 'run')." },
+    { "term": "Lemmatization", "definition": "A text normalization process of grouping inflected forms of a word to their dictionary form (e.g., 'better' to 'good')." },
+    { "term": "Bag-of-Words (BoW)", "definition": "A text representation model that represents text as a multiset of its words, disregarding grammar and word order." },
+    { "term": "TF-IDF", "definition": "A numerical statistic reflecting how important a word is to a document in a collection or corpus." },
+    { "term": "Named Entity Recognition (NER)", "definition": "A task that seeks to locate and classify named entities in text into categories like names, organizations, and locations." },
+    { "term": "Sentiment Analysis", "definition": "The use of NLP to identify and quantify the affective states and subjective information in text." }
+];
+
 
 export const TOPICS: Record<QuizTopic, Topic> = {
     telecom: {
@@ -138,5 +194,25 @@ export const TOPICS: Record<QuizTopic, Topic> = {
     sagin: {
         name: "SAGINs",
         terms: saginTerms
+    },
+    federated: {
+        name: "Federated Learning",
+        terms: federatedLearningTerms
+    },
+    deeplearning: {
+        name: "Deep Learning",
+        terms: deepLearningTerms
+    },
+    llm: {
+        name: "LLM",
+        terms: llmTerms
+    },
+    ml: {
+        name: "ML",
+        terms: mlTerms
+    },
+    nlp: {
+        name: "NLP",
+        terms: nlpTerms
     }
 };
